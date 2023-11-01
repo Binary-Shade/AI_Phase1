@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>Diabetes Prediction Model</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+
+
+</head>
+<body>
+ <div class="login">
+	<div class="header">
+    <div class="navbar">
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="prediction.html">Prediction</a></li>
+          <li><a href="#">Performance</a></li>
+          <li><a href="#">Login</a></li>
+        </ul>
+      </div>
+</div>
+<h1>Diabetes Predictor Model</h1>
+     <div class="form-container">
+    <form action="{{ url_for('predict')}}"method="post">
+                <input class="form-input" type="text" name="pregnancies" placeholder="Number of Pregnancies"><br>
+                <input class="form-input" type="text" name="glucose" placeholder="Glucose (mg/dL)"><br>
+                <input class="form-input" type="text" name="bloodpressure" placeholder="Blood Pressure (mmHg)"><br>
+                <input class="form-input" type="text" name="skinthickness" placeholder="Skin Thickness (mm)"><br>
+                <input class="form-input" type="text" name="insulin" placeholder="Insulin Level (IU/mL) "><br>
+                <input class="form-input" type="text" name="bmi" placeholder="Body Mass Index (kg/m²) "><br>
+                <input class="form-input" type="text" name="dpf" placeholder="Diabetes Pedigree Function "><br>
+                <input class="form-input" type="text" name="age" placeholder="Age (years)"><br>
+        <button type="submit" id="btn" class="btn btn-primary btn-block btn-large">Predict</button>
+    </form>
+  </div>
+	<br>
+   <br>
+   {{ prediction_text }}
+   <div class="red">
+    {% if prediction==1 %}
+      <p><span class='danger'>Oh no ! You have DIABETES.</span></p>
+    </div>
+    <div class="green">
+    {% elif prediction==0 %}
+      <p><span class='safe'>Woah ! You don't have diabetes.</span></p>
+    {% endif %}
+  </div>
+
+<style>
+  * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.green{
+    background-color: #1e7d21;
+    color: white;
+    padding: 16px;
+    text-align: center;
+    position: fixed;
+    top: 110px;
+    right: 5px;
+    display: hidden;
+}
+.red{
+    background-color: #a41919;
+    color: white;
+    padding: 16px;
+    text-align: center;
+    position: fixed;
+    top: 110px;
+    right: 5px;
+    z-index: 1;
+    display: hidden;
+}
+
+.notification.show {
+    display: block;
+}
+
+
+/* Set white background and font styles */
+body {
+  background-color: #333131;
+  font-family: 'Open Sans', sans-serif;
+  color: #ffffff;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 1.2px;
+  position: relative;
+}
+.navbar {
+
+top: 0;
+right: 0;
+z-index: 100;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+width: 100%;
+display: flex;
+justify-content: flex-end; 
+}
+
+.navbar a {
+float: left;
+display: block;
+text-align: center;
+padding: 14px 16px;
+text-decoration: none;
+color: #ffffff;
+}
+
+.header {
+background: #000000cf;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 10px 20px;
+box-shadow: 12px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a:hover {
+background-color: #ffffff;
+color: black;
+}
+
+
+
+.navbar ul {
+list-style-type: none;
+text-align: center;
+margin: 0;
+padding: 0;
+}
+
+.navbar li {
+display: inline;
+margin: 0 20px;
+}
+
+/* Style the content area */
+.content {
+
+margin-top: 200px; /* Adjust to provide space for the fixed navbar */
+padding: 20px;
+}
+/* Style for the form */
+.prediction-form {
+background-color: #f7f7f7;
+border: 1px solid #e0e0e0;
+border-radius: 5px;
+padding: 20px;
+margin-bottom: 20px;
+text-align: left;
+}
+
+/* Style for form inputs */
+.form-input {
+width: 100%;
+margin: 5px 0;
+padding: 10px;
+font-size: 16px;
+border: 1px solid #e0e0e0;
+border-radius: 5px;
+}
+
+/* Style for the submit button */
+.btn {
+margin-top: 45px;
+background: #ffffff;
+color: #000000;
+border: none;
+border-radius: 5px;
+padding: 10px 20px;
+font-size: 18px;
+cursor: pointer;
+transition: background 0.3s ease;
+text-align: center;
+}
+
+.btn:hover {
+background: #46ea3b;
+color: #ffffff;
+}
+
+.btn-block {
+display: block;
+width: 100%;
+}
+
+.btn-large {
+padding: 15px 30px;
+}
+.form-container {   
+max-width: 500px; 
+margin: 40px auto 0;
+padding: 20px;
+}
+
+.prediction-form {
+background-color: #f7f7f7;
+border: 1px solid #e0e0e0;
+border-radius: 5px;
+padding: 20px;
+margin-bottom: 20px;
+text-align: left;
+}
+
+@media (max-width: 768px) {
+.form-container {
+max-width: 100%;
+padding: 10px;
+}
+}
+
+</style>
+
+</body>
+</html>
